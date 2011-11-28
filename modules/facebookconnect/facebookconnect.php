@@ -26,6 +26,10 @@ class FacebookConnect extends Module
     if(!parent::install())
       return false;
       
+    // Add DB fields
+    if(!DB::getInstance()->execute("INSERT INTO `" . _DB_PREFIX_ . "hook` SET `name`= 'identificationForm', `title`= 'Identification form', `description`= 'Hook for the identification form'"))
+      return false;
+
     if(!Configuration::updateValue('FB_APP_ID', '1234')
       || !Configuration::updateValue('FB_COUNTRY', $this->_defaultCountry)
       || !Configuration::updateValue('FB_USER_LOCATION', '')
@@ -33,7 +37,7 @@ class FacebookConnect extends Module
       || !Configuration::updateValue('FB_USER_BIRTHDAY', 'on'))
       return false;
     
-    if(!$this->registerHook('header') || !$this->registerHook('top'))
+    if(!$this->registerHook('header') || !$this->registerHook('top') || !$this->registerHook('identificationForm'))
       return false;
       
     return true;
@@ -44,6 +48,10 @@ class FacebookConnect extends Module
     if(!parent::uninstall())
       return false;
       
+    // Remove DB fields
+    if(!DB::getInstance()->execute("DELETE FROM `" . _DB_PREFIX_ . "hook` WHERE `hook`.`name` = 'identificationForm'"))
+      return false;
+
     if(!Configuration::deleteByName('FB_APP_ID')
       || !Configuration::deleteByName('FB_COUNTRY')
       || !Configuration::deleteByName('FB_USER_LOCATION')
@@ -58,8 +66,7 @@ class FacebookConnect extends Module
   {
     $this->postProcess();
 
-    $output  = '';
-    $output .= '';
+    $output  = '<div class="conf warn"><img src="../img/admin/warning.gif" alt="warn">' . $this->l('To display the Facebook connect in the authentification page, please add {$HOOK_IDENTIFICATION_FORM} on line 102 after {if !isset($email_create)}') . '</div>';
     
     return $output . $this->_displayForm();
   }
@@ -85,7 +92,7 @@ class FacebookConnect extends Module
     $output .= '      <input type="checkbox" name="fb_user_location" id="fb_user_location"' . (Configuration::get('FB_USER_LOCATION') == 'on' ? 'checked="checked"' : '') . ' />';
     $output .= '      <label for="fb_user_location">' . $this->l('Use location permission') . '</label>';
     $output .= '    </p>';
-    $output .= '    <p>';
+    $output .= '    <p style="margin-bottom: 1.2em">';
     $output .= '      <input type="checkbox" name="fb_user_hometown" id="fb_user_hometown"' . (Configuration::get('FB_USER_HOMETOWN') == 'on' ? 'checked="checked"' : '') . ' />';
     $output .= '      <label for="fb_user_hometown">' . $this->l('Use hometown permission') . '</label>';
     $output .= '    </p>';
@@ -115,7 +122,10 @@ class FacebookConnect extends Module
   }
   
   function hookHeader($params)
-  { 
+  {
+    global $smarty;
+  	$smarty->assign(array('HOOK_IDENTIFICATION_FORM' => Module::hookExec('identificationForm')));
+
     // Add media to header
     Tools::addCSS(($this->_path) . 'facebookconnect.css', 'all');
     Tools::addJS(($this->_path)  . 'http://connect.facebook.net/fr_FR/all.js');
@@ -134,6 +144,11 @@ class FacebookConnect extends Module
     $smarty->assign('fb_connect', $conf);
     
     return $this->display(__FILE__, 'facebookconnect.tpl');
+  }
+  
+  function hookIdentificationForm($params)
+  {
+    return $this->hookTop($params);
   }
   
   private function getFacebookLocales($link)
