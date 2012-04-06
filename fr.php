@@ -4,7 +4,7 @@ global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{facebookconnect}prestashop>facebookconnect_dfe6c72972263b5c3d9305c9e207c507'] = 'Facebook connect';
 $_MODULE['<{facebookconnect}prestashop>facebookconnect_3c0695d80abbcbc65673aa7d369428a3'] = 'Ajouter un bouton Facebook connect';
-$_MODULE['<{facebookconnect}prestashop>facebookconnect_800fb925eedb9e0087ab133de5b75654'] = 'Pour afficher le Facebook connect sur la page d\'authentification, merci de rajouter  {$HOOK_IDENTIFICATION_FORM}  à la ligne 102 après {if !isset($email_create)}';
+$_MODULE['<{facebookconnect}prestashop>facebookconnect_b26bb41363d97ed2f53951c48ed4f9d8'] = 'Pour afficher le facebook connect dans la page authentification merci d\'ajouter : {if isset($HOOK_IDENTIFICATION_FORM)}{$HOOK_IDENTIFICATION_FORM}{/if} sur la ligne 102 après  {if !isset($email_create)}';
 $_MODULE['<{facebookconnect}prestashop>facebookconnect_f4f70727dc34561dfde1a3c529b6205c'] = 'Paramètres';
 $_MODULE['<{facebookconnect}prestashop>facebookconnect_ca81c5da8d3796beca28ff399b41ed46'] = 'Identifiant de l\'application Facebook';
 $_MODULE['<{facebookconnect}prestashop>facebookconnect_89353e35298fab7d5024d6a0cc69ac08'] = 'Votre identifiant Facebook';
