@@ -47,6 +47,15 @@ window.fbAsyncInit = function() {
 	js.src = "//connect.facebook.net/{$fb_connect.fb_country}/all.js";
 	ref.parentNode.insertBefore(js, ref);
 }(document));
+
+$(document).ready(function() {
+	$('#facebookconnect_login').click(onClickFBConnectLogin);
+});
+
+function onClickFBConnectLogin(e){
+	e.preventDefault();
+	FB.login();
+}
 </script>
 <input type="hidden" name="customer_firstname" class="fb_first_name" />
 <input type="hidden" name="customer_lastname" class="fb_last_name" />
@@ -54,8 +63,9 @@ window.fbAsyncInit = function() {
 <input type="hidden" name="days" class="days" />
 <input type="hidden" name="months" class="months" />
 <input type="hidden" name="years" class="years" />
-<div id="fb_login">
-	{l s='Ou connectez-vous via Facebook'}
-	<div class="fb-login-button" scope="{$fb_connect.fb_perms}, email" data-show-faces="false" data-width="200" data-max-rows="1">{l s='Login with Facebook' mod='facebookconnect'}</div>
+<div id="facebookconnect">
+	<p style="text-align: center">{l s='Ou connectez-vous via Facebook'}</p>
+	<a href="#" id="facebookconnect_login">{l s='Login with Facebook' mod='facebookconnect'}</a>
+	{*<div class="fb-login-button" scope="{$fb_connect.fb_perms}, email" data-show-faces="false" data-width="200" data-max-rows="1">{l s='Login with Facebook' mod='facebookconnect'}</div>*}
 </div>
 <!-- /Module FACEBOOK CONNECT -->
